@@ -1,0 +1,43 @@
+# ===== Tegrach Nigeria — clean URLs + caching (Apache) =====
+
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Block direct access to the includes/ directory
+  RewriteRule ^includes/ - [F,L]
+
+  # Strip a trailing slash (except the site root)
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # Send index / index.php / index.html to the bare root
+  RewriteCond %{THE_REQUEST} \s/+index(?:\.php|\.html)?[\s?] [NC]
+  RewriteRule ^ / [R=301,L]
+
+  # 301 any legacy *.html request to its clean URL
+  RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  # 301 any direct *.php request to its clean URL
+  RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.php[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  # Legacy contact page -> /contact
+  RewriteRule ^contact_us$ /contact [R=301,L]
+
+  # Internally serve /name from name.php when the file exists
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+  RewriteRule ^(.+?)/?$ $1.php [L]
+</IfModule>
+
+# ===== Long-cache static assets (ports the old vercel.json headers) =====
+<IfModule mod_headers.c>
+  <FilesMatch "\.(?:css|js|jpg|jpeg|png|webp|gif|svg|ico|woff2?|ttf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>

@@ -1,0 +1,33 @@
+{
+  "redirects": [
+    { "source": "/demo5", "destination": "/", "permanent": true },
+    { "source": "/demo5/", "destination": "/", "permanent": true },
+    { "source": "/demo5/index.html", "destination": "/", "permanent": true },
+    { "source": "/demo5/about.html", "destination": "/about.html", "permanent": true },
+    { "source": "/demo5/services.html", "destination": "/services.html", "permanent": true },
+    { "source": "/demo5/projects.html", "destination": "/projects.html", "permanent": true },
+    { "source": "/demo5/style.css", "destination": "/style.css", "permanent": true },
+    { "source": "/demo5/app.js", "destination": "/app.js", "permanent": true },
+    { "source": "/demo5/:path*", "destination": "/:path*", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/style.css",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/app.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+.vercel
+
+# Secrets — real config holds the Resend API key
+includes/config.php
+
+# Cloudflare Pages build output
+dist/
+
+# Internal / private docs — not for the repo
+Information Required from Tegrach.docx
+*.docx
+*.doc

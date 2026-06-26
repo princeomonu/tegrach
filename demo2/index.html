@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tegrach Nigeria — Operations Gazette</title>
+  <meta name="description" content="Tegrach Nigeria Limited. Direct, capability-driven engineering, procurement, installation and commissioning since 1988.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..900&family=DM+Sans:opsz,wght@9..40,300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --steel:#0c0c0c;
+      --steel-2:#171717;
+      --paper:#efece5;
+      --paper-2:#e5e1d6;
+      --concrete:#b8b0a4;
+      --ignition:#ff4d1c;
+      --ignition-deep:#cc3a10;
+      --marker:#ffd84d;
+      --line:#191919;
+      --line-light:rgba(0,0,0,.16);
+      --display:"Bricolage Grotesque",Inter,system-ui,sans-serif;
+      --sans:"DM Sans",ui-sans-serif,system-ui,sans-serif;
+      --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;overflow-x:hidden}
+    body{
+      font-family:var(--sans);font-weight:400;color:var(--steel);background:var(--paper);
+      -webkit-font-smoothing:antialiased;
+    }
+    img{display:block;max-width:100%;object-fit:cover}
+    a{color:inherit;text-decoration:none}
+    h1,h2,h3,h4,p,ul{margin:0;padding:0}
+    ul{list-style:none}
+
+    /* Top spec bar */
+    .spec-bar{
+      display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;
+      padding:14px 28px;background:var(--steel);color:var(--paper);
+      font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    }
+    .spec-bar .l,.spec-bar .r{display:flex;gap:24px}
+    .spec-bar .r{justify-content:flex-end}
+    .spec-bar .pip{display:inline-flex;align-items:center;gap:8px}
+    .spec-bar .pip::before{content:"";width:6px;height:6px;background:var(--ignition);display:inline-block}
+    .spec-bar .blink{animation:blink 1.8s steps(2,end) infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    /* Navigation */
+    .topnav{
+      display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;
+      padding:22px 28px;border-bottom:2px solid var(--steel);background:var(--paper);
+    }
+    .wordmark{
+      display:flex;align-items:baseline;gap:2px;
+      font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.03em;color:var(--steel);
+      font-variation-settings:"opsz" 24;
+    }
+    .wordmark .dot{width:10px;height:10px;background:var(--ignition);margin-left:4px}
+    .topnav nav{
+      display:flex;justify-content:center;gap:36px;
+      font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    }
+    .topnav nav a{position:relative;padding:6px 0}
+    .topnav nav a::before{
+      content:"";position:absolute;left:50%;right:50%;bottom:0;height:2px;background:var(--ignition);
+      transition:left .3s,right .3s;
+    }
+    .topnav nav a:hover::before{left:0;right:0}
+    .nav-cta{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:12px 18px;background:var(--steel);color:var(--paper);
+      font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+      border:2px solid var(--steel);transition:background .25s,color .25s;
+    }
+    .nav-cta:hover{background:var(--ignition);border-color:var(--ignition)}
+    .nav-cta::after{content:"→"}
+
+    /* HERO */
+    .hero{
+      position:relative;
+      display:grid;grid-template-columns:1.35fr 1fr;
+      padding:90px 28px 70px;
+      gap:0;
+      border-bottom:2px solid var(--steel);
+      background:var(--paper);
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--steel);
+    }
+    .hero-content{padding-right:60px;position:relative;z-index:2}
+    .hero .meta{
+      display:flex;gap:16px;align-items:center;flex-wrap:wrap;
+      font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--steel);
+    }
+    .hero .meta .tag{
+      padding:6px 12px;border:1.5px solid var(--steel);background:transparent;
+    }
+    .hero .meta .accent{background:var(--ignition);color:var(--paper);border-color:var(--ignition)}
+
+    .megatype{
+      margin-top:36px;
+      font-family:var(--display);font-weight:800;font-size:clamp(60px,11vw,176px);
+      line-height:.83;letter-spacing:-.045em;color:var(--steel);text-transform:uppercase;
+      font-variation-settings:"opsz" 96;
+    }
+    .megatype span{display:block;animation:slidein 1.1s both cubic-bezier(.2,.7,.1,1)}
+    .megatype span:nth-child(1){animation-delay:.05s}
+    .megatype span:nth-child(2){animation-delay:.18s}
+    .megatype span:nth-child(3){animation-delay:.31s}
+    .megatype .ig{color:var(--ignition)}
+    .megatype .stroke{color:transparent;-webkit-text-stroke:2px var(--steel)}
+    @keyframes slidein{from{transform:translateY(60%);opacity:0;clip-path:inset(0 0 100% 0)}to{transform:none;opacity:1;clip-path:inset(0)}}
+
+    /* Scroll-reveal */
+    .reveal{
+      opacity:0;transform:translateY(20px);
+      transition:opacity .8s cubic-bezier(.2,.7,.1,1) var(--rd,0ms),transform .8s cubic-bezier(.2,.7,.1,1) var(--rd,0ms);
+      will-change:opacity,transform;
+    }
+    .reveal.in-view{opacity:1;transform:none}
+    @media (prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none!important}}
+
+    .hero-foot{
+      display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:end;
+      margin-top:50px;padding-top:30px;border-top:2px solid var(--steel);
+    }
+    .hero-foot p{max-width:480px;color:#2a2a2a;font-size:16px;line-height:1.55}
+    .hero-foot .cta{display:flex;gap:10px;flex-wrap:wrap;justify-self:end}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:16px 22px;border:2px solid var(--steel);
+      font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
+      transition:transform .25s,background .25s,color .25s;
+    }
+    .btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--steel)}
+    .btn-primary{background:var(--ignition);color:var(--paper);border-color:var(--steel)}
+    .btn-primary:hover{background:var(--steel)}
+    .btn-secondary{background:transparent;color:var(--steel)}
+    .btn-secondary:hover{background:var(--steel);color:var(--paper)}
+
+    .hero-photo{
+      position:relative;align-self:stretch;
+      min-height:540px;
+      border:2px solid var(--steel);
+      overflow:hidden;
+      background:var(--steel);
+    }
+    .hero-photo img{width:100%;height:100%;filter:saturate(.9) contrast(1.05)}
+    .hero-photo::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.55));
+      pointer-events:none;
+    }
+    .hero-photo .big-fig{
+      position:absolute;left:24px;top:22px;
+      font-family:var(--display);font-weight:800;font-size:clamp(120px,16vw,220px);
+      line-height:.78;letter-spacing:-.05em;
+      color:var(--paper);mix-blend-mode:overlay;opacity:.85;
+      font-variation-settings:"opsz" 96;
+    }
+    .hero-photo .bands{
+      position:absolute;left:0;right:0;bottom:0;
+      display:flex;justify-content:space-between;padding:18px 22px;
+      color:var(--paper);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+      border-top:1px solid rgba(255,255,255,.4);
+    }
+    .hero-photo .corner{
+      position:absolute;right:16px;top:16px;width:32px;height:32px;
+      border-top:2px solid var(--paper);border-right:2px solid var(--paper);
+    }
+
+    /* Orange ticker */
+    .ticker{
+      background:var(--ignition);color:var(--paper);
+      border-block:2px solid var(--steel);
+      overflow:hidden;padding:18px 0;
+    }
+    .ticker-track{
+      display:flex;gap:48px;width:max-content;align-items:center;
+      animation:scroll 36s linear infinite;
+      font-family:var(--display);font-weight:800;font-size:34px;letter-spacing:-.02em;text-transform:uppercase;
+      font-variation-settings:"opsz" 48;
+    }
+    .ticker-track span{display:inline-flex;align-items:center;gap:48px}
+    .ticker-track span::after{content:"✦";color:var(--steel);font-size:18px}
+    @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* Stats band */
+    .stats{
+      display:grid;grid-template-columns:repeat(5,1fr);gap:0;
+      border-bottom:2px solid var(--steel);background:var(--paper);
+    }
+    .stats div{padding:34px 26px;border-right:2px solid var(--steel);position:relative}
+    .stats div:last-child{border-right:none}
+    .stats .lab{
+      display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);opacity:.7;
+    }
+    .stats .num{
+      display:block;margin-top:14px;
+      font-family:var(--display);font-weight:800;font-size:54px;line-height:1;letter-spacing:-.03em;
+      color:var(--steel);font-feature-settings:"tnum";
+      font-variation-settings:"opsz" 96;
+    }
+    .stats .num sup{font-size:14px;color:var(--ignition);vertical-align:super;margin-left:6px;font-weight:500}
+
+    /* Section heads */
+    .section{padding:120px 28px;border-bottom:2px solid var(--steel)}
+    .section-head{
+      display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:60px;
+    }
+    .section-head p{max-width:480px;color:#363636;font-size:16px;line-height:1.6}
+    .eyebrow{
+      display:inline-flex;gap:10px;align-items:center;
+      font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ignition-deep);
+      margin-bottom:18px;
+    }
+    .eyebrow::before{content:"⬢";color:var(--ignition);font-size:14px}
+    .display-h{
+      font-family:var(--display);font-weight:800;font-size:clamp(40px,5.4vw,80px);
+      line-height:.92;letter-spacing:-.035em;text-transform:uppercase;color:var(--steel);
+      font-variation-settings:"opsz" 72;
+    }
+    .display-h .ig{color:var(--ignition)}
+
+    /* Operations matrix */
+    .matrix{
+      border-top:2px solid var(--steel);border-bottom:2px solid var(--steel);
+    }
+    .matrix-row{
+      display:grid;grid-template-columns:90px 1.2fr 1.8fr 220px 160px;
+      gap:30px;align-items:center;
+      padding:26px 16px;border-bottom:1.5px solid var(--line-light);
+      transition:background .3s;
+      cursor:default;
+    }
+    .matrix-row:last-child{border-bottom:none}
+    .matrix-row:hover{background:#e8e3d4}
+    .matrix-row .n{
+      font-family:var(--mono);font-size:14px;letter-spacing:.04em;color:var(--steel);font-weight:500;
+    }
+    .matrix-row .n::before{content:"//";color:var(--ignition);margin-right:8px}
+    .matrix-row h3{
+      font-family:var(--display);font-weight:700;font-size:26px;line-height:1.05;text-transform:uppercase;letter-spacing:-.01em;
+      font-variation-settings:"opsz" 24;
+    }
+    .matrix-row p{color:#3a3a3a;font-size:14.5px;line-height:1.55}
+    .matrix-row .tags{display:flex;flex-wrap:wrap;gap:6px}
+    .matrix-row .tags b{
+      font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;
+      padding:5px 8px;background:transparent;border:1.5px solid var(--steel);color:var(--steel);
+    }
+    .matrix-row .thumb{
+      position:relative;aspect-ratio:4/3;overflow:hidden;border:1.5px solid var(--steel);
+    }
+    .matrix-row .thumb img{width:100%;height:100%;filter:grayscale(.25) contrast(1.05);transition:filter .4s,transform .8s}
+    .matrix-row:hover .thumb img{filter:grayscale(0) contrast(1);transform:scale(1.04)}
+
+    /* Evidence (work grid) */
+    .evidence{background:var(--steel);color:var(--paper)}
+    .evidence .display-h,.evidence .display-h .ig{color:var(--paper)}
+    .evidence .display-h .ig{color:var(--ignition)}
+    .evidence .eyebrow{color:var(--marker)}
+    .evidence .eyebrow::before{color:var(--ignition)}
+    .evidence p{color:#c2bdb0}
+    .work-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:30px;
+      border-top:2px solid var(--paper);
+    }
+    .work-grid figure{
+      position:relative;aspect-ratio:4/5;overflow:hidden;
+      border-right:2px solid var(--paper);
+    }
+    .work-grid figure:last-child{border-right:none}
+    .work-grid img{width:100%;height:100%;transition:transform 1.2s cubic-bezier(.2,.7,.1,1)}
+    .work-grid figure:hover img{transform:scale(1.05)}
+    .work-grid figcaption{
+      position:absolute;left:0;right:0;bottom:0;
+      display:flex;justify-content:space-between;align-items:end;
+      padding:22px;color:var(--paper);
+      font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+      background:linear-gradient(180deg,transparent,rgba(0,0,0,.85));
+    }
+    .work-grid figcaption b{
+      font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em;text-transform:uppercase;
+      font-variation-settings:"opsz" 24;
+    }
+    .work-meta{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+      border-bottom:2px solid var(--paper);
+    }
+    .work-meta div{
+      padding:22px;border-right:1px solid rgba(239,236,229,.18);
+      font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#c2bdb0;
+    }
+    .work-meta div:last-child{border-right:none}
+    .work-meta b{display:block;color:var(--paper);font-family:var(--display);font-weight:700;font-size:22px;margin-top:6px;letter-spacing:-.01em;font-variation-settings:"opsz" 24}
+
+    /* Compliance + ISO band */
+    .compliance{background:var(--paper)}
+    .compliance .wrap{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:80px;align-items:center;
+    }
+    .compliance .display-h{max-width:640px}
+    .iso-block{
+      display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:stretch;
+      max-width:520px;border:2px solid var(--steel);margin-top:36px;
+      background:var(--paper);
+    }
+    .iso-block b{
+      display:grid;place-items:center;padding:0 24px;
+      font-family:var(--display);font-weight:800;font-size:42px;color:var(--paper);background:var(--steel);
+      letter-spacing:-.02em;
+      font-variation-settings:"opsz" 48;
+    }
+    .iso-block span{
+      padding:18px 22px;font-family:var(--mono);font-size:12.5px;line-height:1.55;color:var(--steel);
+    }
+    .iso-block small{display:block;color:var(--ignition);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+    .compliance-photo{position:relative;aspect-ratio:4/5;overflow:hidden;border:2px solid var(--steel);background:var(--steel)}
+    .compliance-photo img{width:100%;height:100%}
+    .compliance-photo .stamp{
+      position:absolute;right:18px;top:18px;
+      width:120px;height:120px;border:2px solid var(--paper);border-radius:50%;
+      display:grid;place-items:center;
+      font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper);text-align:center;
+      background:rgba(0,0,0,.4);backdrop-filter:blur(6px);
+    }
+    .compliance-photo .stamp b{display:block;font-family:var(--display);font-weight:800;font-size:32px;line-height:1;color:var(--marker);font-variation-settings:"opsz" 32}
+
+    /* CTA + Footer */
+    .cta-band{
+      background:var(--ignition);color:var(--paper);border-bottom:2px solid var(--steel);
+      padding:120px 28px;
+      display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:end;
+      position:relative;overflow:hidden;
+    }
+    .cta-band::after{
+      content:"";position:absolute;right:-60px;top:-60px;width:300px;height:300px;
+      background:var(--steel);border-radius:50%;mix-blend-mode:multiply;opacity:.2;
+    }
+    .cta-band .display-h{color:var(--paper);font-size:clamp(48px,7vw,108px)}
+    .cta-band .display-h em{font-style:italic;font-variation-settings:"opsz" 96,"wght" 600;color:var(--steel)}
+    .cta-band .row{display:grid;gap:20px;font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;line-height:1.55}
+    .cta-band .row b{color:var(--marker);display:block;font-size:11px;letter-spacing:.14em;margin-bottom:4px;font-weight:500}
+    .cta-band .row a{display:block;font-size:18px;font-family:var(--display);font-weight:700;letter-spacing:-.01em;text-transform:none;color:var(--paper);font-variation-settings:"opsz" 24}
+    .cta-band .row a:hover{color:var(--steel)}
+
+    footer.foot{
+      background:var(--steel);color:var(--paper);padding:70px 28px 40px;
+    }
+    .foot-top{
+      display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;
+      padding-bottom:48px;border-bottom:1px solid rgba(239,236,229,.18);
+    }
+    .foot-brand{
+      font-family:var(--display);font-weight:800;font-size:48px;letter-spacing:-.03em;color:var(--paper);text-transform:uppercase;
+      font-variation-settings:"opsz" 48;
+    }
+    .foot h5{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--marker);margin-bottom:18px}
+    .foot p,.foot li,.foot a{font-family:var(--sans);font-size:14px;line-height:1.8;color:#cfcbc1}
+    .foot-bot{
+      display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;align-items:center;
+      margin-top:24px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--concrete);
+    }
+
+    /* Mobile menu toggle */
+    .menu-toggle{
+      display:none;
+      position:relative;width:44px;height:44px;
+      border:2px solid var(--steel);background:var(--paper);
+      padding:0;cursor:pointer;
+      justify-self:end;
+    }
+    .menu-toggle span{
+      position:absolute;left:50%;width:18px;height:2px;background:var(--steel);
+      transform:translateX(-50%);
+      transition:transform .3s cubic-bezier(.6,.05,.2,1),top .3s,bottom .3s;
+    }
+    .menu-toggle span:nth-child(1){top:15px}
+    .menu-toggle span:nth-child(2){bottom:15px}
+    body.menu-open{overflow:hidden}
+    body.menu-open .menu-toggle{background:var(--ignition);border-color:var(--ignition)}
+    body.menu-open .menu-toggle span{background:var(--paper)}
+    body.menu-open .menu-toggle span:nth-child(1){top:21px;transform:translateX(-50%) rotate(45deg)}
+    body.menu-open .menu-toggle span:nth-child(2){bottom:21px;transform:translateX(-50%) rotate(-45deg)}
+
+    .mobile-menu{
+      position:fixed;inset:0;z-index:40;
+      background:var(--steel);color:var(--paper);
+      display:flex;flex-direction:column;
+      padding:120px 28px 40px;
+      opacity:0;pointer-events:none;
+      transform:translateY(-10px);
+      transition:opacity .35s cubic-bezier(.2,.7,.1,1),transform .35s cubic-bezier(.2,.7,.1,1);
+    }
+    .mm-close{
+      position:absolute;top:24px;right:24px;
+      display:inline-flex;align-items:center;gap:10px;
+      padding:11px 16px;border:2px solid var(--paper);background:transparent;color:var(--paper);
+      font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+      cursor:pointer;
+      transition:background .25s,color .25s,border-color .25s,transform .15s;
+    }
+    .mm-close::after{content:"✕";line-height:1}
+    .mm-close:hover{background:var(--ignition);border-color:var(--ignition);color:var(--paper)}
+    .mm-close:active{transform:translate(2px,2px)}
+    body.menu-open .mobile-menu{opacity:1;pointer-events:auto;transform:none}
+    .mobile-menu nav{display:grid;gap:0;border-top:1px solid rgba(239,236,229,.18)}
+    .mobile-menu nav a{
+      font-family:var(--display);font-weight:800;
+      font-size:clamp(28px,7vw,38px);line-height:1;letter-spacing:-.02em;text-transform:uppercase;color:var(--paper);
+      font-variation-settings:"opsz" 48;
+      padding:22px 0;border-bottom:1px solid rgba(239,236,229,.18);
+      display:flex;justify-content:space-between;align-items:center;
+      transition:color .25s,padding-left .25s;
+    }
+    .mobile-menu nav a .n{
+      font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ignition);letter-spacing:.14em;
+    }
+    .mobile-menu nav a:hover,.mobile-menu nav a:active{color:var(--ignition);padding-left:6px}
+    .mm-foot{
+      margin-top:auto;padding-top:24px;
+      display:grid;gap:10px;
+      font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--concrete);
+    }
+    .mm-foot a{color:var(--paper)}
+    .mm-foot b{color:var(--marker);font-weight:500;display:inline-block;margin-right:8px}
+
+    /* Scroll-to-top FAB */
+    .scroll-top{
+      position:fixed;
+      right:max(20px,env(safe-area-inset-right));
+      bottom:max(20px,env(safe-area-inset-bottom));
+      width:48px;height:48px;
+      display:grid;place-items:center;
+      background:var(--ignition);color:var(--paper);
+      border:2px solid var(--steel);
+      font-family:var(--mono);font-size:18px;font-weight:500;line-height:1;
+      cursor:pointer;
+      opacity:0;pointer-events:none;
+      transform:translateY(8px);
+      transition:opacity .3s,transform .3s,background .25s;
+      z-index:30;
+      box-shadow:4px 4px 0 var(--steel);
+    }
+    .scroll-top.visible{opacity:1;pointer-events:auto;transform:none}
+    .scroll-top:hover{background:var(--steel);color:var(--ignition);border-color:var(--ignition);box-shadow:4px 4px 0 var(--ignition)}
+    .scroll-top:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--steel)}
+
+    @media (max-width:1100px){
+      .hero{grid-template-columns:1fr}
+      .hero-content{padding-right:0}
+      .hero-photo{margin-top:40px;min-height:380px}
+      .matrix-row{grid-template-columns:60px 1.4fr 1.8fr 180px;gap:18px}
+      .matrix-row .thumb{display:none}
+      .stats{grid-template-columns:repeat(3,1fr)}
+      .stats div:nth-child(3){border-right:none}
+      .stats div:nth-child(4),.stats div:nth-child(5){border-top:2px solid var(--steel)}
+      .stats div:nth-child(5){border-right:none}
+    }
+    @media (max-width:900px){
+      .spec-bar{grid-template-columns:1fr;text-align:center;gap:10px;padding:12px 20px}
+      .spec-bar .l,.spec-bar .r{justify-content:center;flex-wrap:wrap;gap:14px;font-size:10px}
+      .spec-bar .center{order:-1}
+      .topnav{grid-template-columns:auto auto;padding:18px 20px}
+      .topnav nav{display:none}
+      .topnav .nav-cta{display:none}
+      .menu-toggle{display:block}
+      .hero{padding:50px 20px 50px;grid-template-columns:1fr}
+      .hero-content{padding-right:0}
+      .hero .meta{font-size:10px;gap:10px}
+      .hero .meta .tag{padding:5px 10px}
+      .megatype{font-size:clamp(48px,12vw,82px)}
+      .hero-foot,.section-head,.compliance .wrap,.cta-band{grid-template-columns:1fr;gap:24px}
+      .hero-foot{margin-top:36px;padding-top:24px}
+      .hero-foot .cta{justify-self:start}
+      .hero-photo{margin-top:34px;min-height:300px}
+      .hero-photo .big-fig{font-size:120px;left:18px;top:18px}
+      .ticker-track{font-size:24px;gap:32px}
+      .ticker-track span{gap:32px}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .stats div{padding:24px 18px;border-right:none}
+      .stats div:nth-child(odd){border-right:2px solid var(--steel)}
+      .stats div:nth-child(n+3){border-top:2px solid var(--steel)}
+      .stats div:nth-child(5){grid-column:span 2;border-right:none}
+      .stats .num{font-size:42px}
+      .stats .lab{font-size:10px}
+      .section{padding:64px 20px}
+      .display-h{font-size:clamp(36px,8vw,56px)}
+      .matrix-row{grid-template-columns:48px 1fr;gap:14px;padding:22px 8px}
+      .matrix-row h3{font-size:20px}
+      .matrix-row p,.matrix-row .tags{display:none}
+      .work-grid{grid-template-columns:1fr}
+      .work-grid figure{border-right:none;border-bottom:2px solid var(--paper);aspect-ratio:4/3}
+      .work-grid figure:last-child{border-bottom:none}
+      .work-meta{grid-template-columns:repeat(2,1fr)}
+      .work-meta div{font-size:10px;padding:18px}
+      .work-meta b{font-size:18px}
+      .compliance .wrap{gap:36px}
+      .compliance-photo{aspect-ratio:4/3;max-height:360px}
+      .compliance-photo .stamp{width:96px;height:96px;font-size:9.5px}
+      .compliance-photo .stamp b{font-size:24px}
+      .iso-block b{padding:0 18px;font-size:32px}
+      .iso-block span{padding:14px 18px;font-size:11.5px}
+      .cta-band{padding:80px 20px;gap:32px}
+      .cta-band .display-h{font-size:clamp(44px,11vw,72px)}
+      .cta-band .row a{font-size:16px}
+      .foot{padding:48px 20px 28px}
+      .foot-top{grid-template-columns:1fr 1fr;gap:30px;padding-bottom:30px}
+      .foot-brand{font-size:38px}
+    }
+    @media (max-width:480px){
+      .topnav{padding:14px 16px}
+      .wordmark{font-size:24px}
+      .hero{padding:40px 16px 40px}
+      .megatype{font-size:clamp(40px,13vw,64px)}
+      .ticker-track{font-size:20px}
+      .stats div{padding:18px 14px}
+      .stats .num{font-size:34px}
+      .section{padding:54px 16px}
+      .display-h{font-size:clamp(32px,9vw,46px)}
+      .matrix-row{grid-template-columns:40px 1fr;padding:18px 4px}
+      .matrix-row h3{font-size:18px}
+      .iso-block{grid-template-columns:1fr}
+      .iso-block b{padding:14px;font-size:28px}
+      .compliance-photo .stamp{right:12px;top:12px;width:80px;height:80px;font-size:9px}
+      .cta-band{padding:60px 16px}
+      .foot{padding:36px 16px 24px}
+      .foot-top{grid-template-columns:1fr;gap:24px}
+      .scroll-top{width:44px;height:44px;right:14px;bottom:14px}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="spec-bar">
+    <div class="l">
+      <span>OPERATIONS GAZETTE №&nbsp;XXXVII</span>
+      <span>WARRI · DELTA STATE · NG</span>
+    </div>
+    <div class="pip"><span class="blink">LIVE FIELD STATUS</span></div>
+    <div class="r">
+      <span>EST. 1988</span>
+      <span>ISO 9001:2015</span>
+      <span>+234 703 915 3029</span>
+    </div>
+  </div>
+
+  <header class="topnav">
+    <a class="wordmark" href="/">TEGRACH<span class="dot"></span></a>
+    <nav>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="nav-cta" href="#contact">Request a bid</a>
+    <button class="menu-toggle" aria-label="Menu" aria-controls="mobile-menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <button class="mm-close" type="button" aria-label="Close menu">Close</button>
+    <nav>
+      <a href="#capabilities"><span>Capabilities</span><span class="n">01</span></a>
+      <a href="#evidence"><span>Evidence</span><span class="n">02</span></a>
+      <a href="#compliance"><span>Compliance</span><span class="n">03</span></a>
+      <a href="#contact"><span>Contact</span><span class="n">04</span></a>
+    </nav>
+    <div class="mm-foot">
+      <span><b>EMAIL</b><a href="mailto:contact@tegrach-nigeria.com">contact@tegrach-nigeria.com</a></span>
+      <span><b>PHONE</b><a href="tel:+2347039153029">+234 703 915 3029</a></span>
+      <span><b>WARRI</b>Plot 3 Desney Street · Delta State · NG</span>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="meta">
+        <span class="tag accent">EPIC CONTRACTOR</span>
+        <span class="tag">EST. 1988</span>
+        <span class="tag">WARRI · NG</span>
+        <span>FILE: HOME / VOL 37</span>
+      </div>
+      <h1 class="megatype">
+        <span>Epic</span>
+        <span class="ig">Engineering.</span>
+        <span class="stroke">Built In The Delta.</span>
+      </h1>
+      <div class="hero-foot">
+        <p>Tegrach Nigeria delivers engineering, procurement, installation and commissioning for oil &amp; gas, process and industrial operators — out of Warri, by Nigerian hands, to international standard. Direct scopes. Documented work.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#capabilities">Our capabilities ↗</a>
+          <a class="btn btn-secondary" href="#contact">Request bid</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <img src="../assets/tegrach/banner2.jpg" alt="Industrial platform">
+      <span class="big-fig">37</span>
+      <span class="corner"></span>
+      <div class="bands">
+        <span>FIG. 01 / FIELD ASSET</span>
+        <span>NIGER DELTA · 2024</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Dredging</span><span>Civil &amp; Mechanical</span><span>Facility Maintenance</span><span>Pipe Solutions</span><span>Procurement</span><span>Commissioning</span><span>ISO 9001:2015</span><span>Warri · Nigeria</span>
+      <span>Dredging</span><span>Civil &amp; Mechanical</span><span>Facility Maintenance</span><span>Pipe Solutions</span><span>Procurement</span><span>Commissioning</span><span>ISO 9001:2015</span><span>Warri · Nigeria</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div><span class="lab">Years in delivery</span><span class="num">37<sup>YRS</sup></span></div>
+    <div><span class="lab">Service lines</span><span class="num">06<sup>EPIC</sup></span></div>
+    <div><span class="lab">Sectors served</span><span class="num">07<sup>O&amp;G</sup></span></div>
+    <div><span class="lab">Quality system</span><span class="num">ISO<sup>9001</sup></span></div>
+    <div><span class="lab">Field crews</span><span class="num">150+<sup>NG</sup></span></div>
+  </div>
+
+  <section class="section" id="capabilities">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">SECTION 01 / CAPABILITY MATRIX</p>
+        <h2 class="display-h">Six service<br>lines. <span class="ig">One</span><br>contractor.</h2>
+      </div>
+      <p>Tegrach takes scopes as discrete packages or as integrated EPIC turnkey programmes. Every capability below is held in-house with Nigerian technical leadership and an international procurement network behind it.</p>
+    </div>
+
+    <div class="matrix">
+      <article class="matrix-row">
+        <span class="n">01</span>
+        <h3>Dredging</h3>
+        <p>Reclamation, bathymetric surveys, marine works and dry-docking support across Niger Delta waterways.</p>
+        <div class="tags"><b>RECLAMATION</b><b>SURVEYS</b><b>MARINE</b></div>
+        <div class="thumb"><img src="../assets/tegrach/service-dredging.jpg" alt="Dredging"></div>
+      </article>
+      <article class="matrix-row">
+        <span class="n">02</span>
+        <h3>Civil · Electrical · Mechanical</h3>
+        <p>Engineering, design, construction and installation for onshore plants and offshore support structures.</p>
+        <div class="tags"><b>CIVIL</b><b>E&amp;I</b><b>FABRICATION</b></div>
+        <div class="thumb"><img src="../assets/tegrach/service-civil.jpg" alt="Civil engineering"></div>
+      </article>
+      <article class="matrix-row">
+        <span class="n">03</span>
+        <h3>Facility Maintenance</h3>
+        <p>Preventive, corrective and shutdown maintenance for process facilities — staffed, scheduled and reported.</p>
+        <div class="tags"><b>O&amp;M</b><b>SHUTDOWNS</b><b>RELIABILITY</b></div>
+        <div class="thumb"><img src="../assets/tegrach/service-maintenance.jpg" alt="Maintenance"></div>
+      </article>
+      <article class="matrix-row">
+        <span class="n">04</span>
+        <h3>Pipe Solutions</h3>
+        <p>Pipeline construction, tie-ins, welding, corrosion protection and integrity management at scale.</p>
+        <div class="tags"><b>PIPELINE</b><b>WELDING</b><b>INTEGRITY</b></div>
+        <div class="thumb"><img src="../assets/tegrach/service-pipe.jpg" alt="Pipe"></div>
+      </article>
+      <article class="matrix-row">
+        <span class="n">05</span>
+        <h3>Procurement</h3>
+        <p>Equipment, material and spare-parts sourcing into Africa with qualified OEM and logistics partners.</p>
+        <div class="tags"><b>EQUIPMENT</b><b>OEM</b><b>LOGISTICS</b></div>
+        <div class="thumb"><img src="../assets/tegrach/service-procurement.jpg" alt="Procurement"></div>
+      </article>
+      <article class="matrix-row">
+        <span class="n">06</span>
+        <h3>Installation &amp; Commissioning</h3>
+        <p>Mechanical completion, pre-commissioning and start-up support for refineries, petrochem and modular packages.</p>
+        <div class="tags"><b>OVERHAUL</b><b>PRE-COMM</b><b>START-UP</b></div>
+        <div class="thumb"><img src="../assets/tegrach/service-installation.jpg" alt="Commissioning"></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section evidence" id="evidence">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">SECTION 02 / FIELD EVIDENCE</p>
+        <h2 class="display-h">Evidence.<br><span class="ig">Not</span> adjectives.</h2>
+      </div>
+      <p>Public Tegrach project imagery — fabrication yards, pipeline runs, marine assets and process plants — captured across active field assignments in the Delta and beyond.</p>
+    </div>
+
+    <div class="work-meta">
+      <div>Project class<b>EPIC</b></div>
+      <div>Region<b>Niger Delta</b></div>
+      <div>Period<b>2022 – 2026</b></div>
+      <div>Sector<b>Oil · Gas · Process</b></div>
+    </div>
+
+    <div class="work-grid">
+      <figure>
+        <img src="../assets/tegrach/project1.jpg" alt="Pipeline">
+        <figcaption><b>Pipeline Run</b><span>№ 01 · DELTA</span></figcaption>
+      </figure>
+      <figure>
+        <img src="../assets/tegrach/project4.jpg" alt="Refinery">
+        <figcaption><b>Refinery Asset</b><span>№ 02 · WARRI</span></figcaption>
+      </figure>
+      <figure>
+        <img src="../assets/tegrach/project5.jpg" alt="Plant crew">
+        <figcaption><b>Plant Crew</b><span>№ 03 · 2024</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section compliance" id="compliance">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">SECTION 03 / COMPLIANCE</p>
+        <h2 class="display-h">Standards held<br>offshore, onshore<br>and in <span class="ig">audit</span>.</h2>
+        <p style="margin-top:24px;max-width:540px;color:#3a3a3a;font-size:16px;line-height:1.6">Tegrach implements a documented ISO 9001:2015 quality management system across engineering, procurement and execution. HSE is held as line responsibility — crews trained, equipped and supervised to international standard.</p>
+        <div class="iso-block">
+          <b>ISO</b>
+          <span><small>Certified</small>9001:2015 Quality Management System — implemented end-to-end across engineering, procurement and field execution.</span>
+        </div>
+      </div>
+      <figure class="compliance-photo">
+        <img src="../assets/tegrach/banner3.jpg" alt="Field crew">
+        <div class="stamp"><span><b>HSE</b>FIELD<br>STANDARD</span></div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="cta-band" id="contact">
+    <h2 class="display-h">Bring us the <em>brief.</em></h2>
+    <div>
+      <div class="row"><b>EMAIL</b><a href="mailto:contact@tegrach-nigeria.com">contact@tegrach-nigeria.com</a></div>
+      <div class="row"><b>PHONE</b><a href="tel:+2347039153029">+234 703 915 3029</a></div>
+      <div class="row"><b>BUREAU</b><a href="#">Plot 3 Desney Street, Off Refinery Road, Warri, Delta State.</a></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand">TEGRACH<span style="color:var(--ignition)">.</span></div>
+        <p style="margin-top:16px;max-width:280px">EPIC contractor delivering engineering, procurement, installation &amp; commissioning across West African energy and process operators.</p>
+      </div>
+      <div>
+        <h5>Bureau</h5>
+        <p>Plot 3 Desney Street<br>Off Refinery Road<br>Warri, Delta State<br>Nigeria</p>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <p>+234 703 915 3029<br>contact@tegrach-nigeria.com</p>
+      </div>
+      <div>
+        <h5>Lines</h5>
+        <p>Dredging<br>Civil · E&amp;M<br>Maintenance<br>Pipe<br>Procurement<br>Commissioning</p>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 1988–2026 Tegrach Nigeria Limited</span>
+      <span>RC. Nigerian Limited Company</span>
+      <span>Operations Gazette · Vol. XXXVII</span>
+    </div>
+  </footer>
+
+  <button class="scroll-top" aria-label="Scroll to top" type="button">↑</button>
+
+  <script>
+  (()=>{
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if(!reduced){
+      const io=new IntersectionObserver((es,o)=>{
+        es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in-view');o.unobserve(e.target);}});
+      },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+      const groups=[
+        {sel:'.section-head, .compliance .wrap > *, .cta-band > *'},
+        {sel:'.stats > div',stagger:55},
+        {sel:'.matrix-row',stagger:65},
+        {sel:'.work-meta > div',stagger:55},
+        {sel:'.work-grid figure',stagger:90},
+        {sel:'.foot-top > div',stagger:60},
+      ];
+      groups.forEach(g=>{
+        document.querySelectorAll(g.sel).forEach((el,i)=>{
+          el.classList.add('reveal');
+          if(g.stagger)el.style.setProperty('--rd',`${i*g.stagger}ms`);
+          io.observe(el);
+        });
+      });
+    }
+
+    // Mobile menu
+    const tgl=document.querySelector('.menu-toggle');
+    const mm=document.getElementById('mobile-menu');
+    const closeMenu=()=>{
+      document.body.classList.remove('menu-open');
+      tgl?.setAttribute('aria-expanded','false');
+      mm?.setAttribute('aria-hidden','true');
+    };
+    tgl?.addEventListener('click',()=>{
+      const open=document.body.classList.toggle('menu-open');
+      tgl.setAttribute('aria-expanded',open?'true':'false');
+      mm?.setAttribute('aria-hidden',open?'false':'true');
+    });
+    mm?.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
+    document.querySelector('.mm-close')?.addEventListener('click',closeMenu);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+
+    // Scroll-to-top
+    const stb=document.querySelector('.scroll-top');
+    if(stb){
+      let ticking=false;
+      window.addEventListener('scroll',()=>{
+        if(!ticking){
+          requestAnimationFrame(()=>{
+            stb.classList.toggle('visible',window.scrollY>600);
+            ticking=false;
+          });
+          ticking=true;
+        }
+      },{passive:true});
+      stb.addEventListener('click',()=>window.scrollTo({top:0,behavior:reduced?'auto':'smooth'}));
+    }
+  })();
+  </script>
+</body>
+</html>
