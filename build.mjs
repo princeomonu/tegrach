@@ -1,17 +1,23 @@
 /*
- * Static site builder for Vercel (no PHP needed in CI).
- * Wraps each body partial in site/pages/*.html with the shared header/footer
- * chrome and writes the result to public/. Copies assets, style.css, app.js.
+ * Static site builder (no PHP needed in CI). Wraps each body partial in
+ * src/pages/*.html with the shared header/footer chrome and writes the result
+ * to dist/, then copies src/assets, src/style.css, src/app.js.
  *
- * Vercel: Build command = `node build.mjs`, Output directory = `public`.
- * Run locally: `node build.mjs`.
+ * The output dist/ is a self-contained static site that works on any host:
+ *   - Vercel:           Build = `node build.mjs`, Output dir = `dist` (vercel.json).
+ *   - Cloudflare Pages: build also emits dist/_redirects + dist/_headers.
+ *   - Apache / PHP host: build also emits dist/.htaccess (clean URLs + caching).
+ * The contact form (POST /api/contact) is the only per-host piece — see
+ * api/ (Vercel) and platform/ (Cloudflare, PHP).
+ *
+ * Run locally: `node build.mjs`  (then serve dist/, e.g. `npx serve dist`).
  */
 import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const root = dirname(fileURLToPath(import.meta.url));
-const out = join(root, 'public');
+const out = join(root, 'dist');
 const SITE = 'https://www.tegrach-nigeria.com';
 const OG = `${SITE}/assets/og/og-default.jpg`;
 
@@ -66,6 +72,37 @@ const header = (m) => {
   <meta name="twitter:image" content="${ogImage}">
   <meta name="twitter:image:alt" content="Tegrach Nigeria Limited logo and tagline">
 <link rel="stylesheet" href="/style.css?v=12">
+  <!-- Structured data: LocalBusiness (sitewide) -->
+  <script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    '@id': SITE + '/#business',
+    name: 'Tegrach Nigeria Limited',
+    url: SITE,
+    logo: SITE + '/assets/tegrach/logo.png',
+    image: OG,
+    description:
+      'Indigenous Nigerian EPC contractor delivering civil, mechanical, dredging, electrical and QA/QC solutions to the oil & gas, power and industrial sectors.',
+    slogan: 'Built on Precision. Driven by Excellence.',
+    foundingDate: '2011',
+    email: 'contact@tegrach-nigeria.com',
+    telephone: '+2347039153029',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Plot 3 Desney Street, Off Refinery Road',
+      addressLocality: 'Warri',
+      addressRegion: 'Delta State',
+      addressCountry: 'NG',
+    },
+    areaServed: 'NG',
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '08:00',
+      closes: '17:00',
+    },
+    sameAs: [],
+  })}</script>
 ${m.extraHead || ''}
 </head>
 <body>
@@ -175,32 +212,10 @@ const footer = () => `</main>
 </html>
 `;
 
+// The sitewide LocalBusiness JSON-LD (in header()) already describes the company,
+// so the homepage only needs the LCP hero preload here.
 const INDEX_EXTRA_HEAD = `<!-- LCP hero image: discoverable + high priority -->
-<link rel="preload" as="image" href="/assets/site/banner_img1-2.webp?v=2" type="image/webp" fetchpriority="high">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Tegrach Nigeria Limited",
-  "url": "https://www.tegrach-nigeria.com",
-  "logo": "https://www.tegrach-nigeria.com/assets/tegrach/logo.png",
-  "image": "https://www.tegrach-nigeria.com/assets/og/og-default.jpg",
-  "description": "Indigenous Nigerian EPC contractor delivering civil, mechanical, dredging, electrical and QA/QC solutions to the oil & gas, power and industrial sectors.",
-  "slogan": "Built on Precision. Driven by Excellence.",
-  "foundingDate": "2011",
-  "email": "contact@tegrach-nigeria.com",
-  "telephone": "+234-703-915-3029",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Plot 3 Desney Street, Off Refinery Road",
-    "addressLocality": "Warri",
-    "addressRegion": "Delta State",
-    "addressCountry": "NG"
-  },
-  "areaServed": "NG",
-  "sameAs": []
-}
-</script>`;
+<link rel="preload" as="image" href="/assets/site/banner_img1-2.webp?v=2" type="image/webp" fetchpriority="high">`;
 
 const PAGES = [
   {
@@ -251,16 +266,76 @@ rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
 for (const p of PAGES) {
-  const body = readFileSync(join(root, 'site', 'pages', `${p.slug}.html`), 'utf8');
+  const body = readFileSync(join(root, 'src', 'pages', `${p.slug}.html`), 'utf8');
   writeFileSync(join(out, `${p.slug}.html`), header(p) + body + footer());
   console.log(`built ${p.slug}.html`);
 }
 
 for (const a of ['assets', 'style.css', 'app.js']) {
-  if (existsSync(join(root, a))) {
-    cpSync(join(root, a), join(out, a), { recursive: true });
-    console.log(`copied ${a}`);
+  if (existsSync(join(root, 'src', a))) {
+    cpSync(join(root, 'src', a), join(out, a), { recursive: true });
+    console.log(`copied src/${a}`);
   }
 }
+
+// ---- Per-host sidecar config, so the same dist/ deploys anywhere ----------
+// Vercel reads vercel.json instead and ignores these files; they only matter
+// on Cloudflare Pages (_redirects/_headers) and Apache/PHP hosts (.htaccess).
+
+// Cloudflare Pages: legacy redirects + long-cache immutable assets.
+writeFileSync(join(out, '_redirects'), [
+  '/index.html        /          301',
+  '/contact_us        /contact   301',
+  '/contact_us.php    /contact   301',
+  '',
+].join('\n'));
+writeFileSync(join(out, '_headers'), [
+  '/assets/*',
+  '  Cache-Control: public, max-age=31536000, immutable',
+  '/style.css',
+  '  Cache-Control: public, max-age=31536000, immutable',
+  '/app.js',
+  '  Cache-Control: public, max-age=31536000, immutable',
+  '',
+].join('\n'));
+console.log('wrote _redirects + _headers (Cloudflare)');
+
+// Apache / PHP host: clean URLs over the static .html, route /api/contact to
+// the PHP handler (copy platform/php/* into the deploy root), long-cache assets.
+writeFileSync(join(out, '.htaccess'), `# Generated by build.mjs — Apache/PHP host config for the static dist/.
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Contact form endpoint -> PHP handler (place contact.php at the deploy root).
+  RewriteRule ^api/contact/?$ contact.php [L]
+
+  # Strip trailing slash (except root).
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # 301 index / *.html requests to their clean URL.
+  RewriteCond %{THE_REQUEST} \\s/+index(?:\\.html)?[\\s?] [NC]
+  RewriteRule ^ / [R=301,L]
+  RewriteCond %{THE_REQUEST} \\s/+([^?\\s]+)\\.html[\\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+  RewriteRule ^contact_us$ /contact [R=301,L]
+
+  # Internally serve /name from name.html when it exists.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\\.(?:css|js|jpg|jpeg|png|webp|gif|svg|ico|woff2?|ttf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+`);
+console.log('wrote .htaccess (Apache/PHP)');
 
 console.log(`Build complete -> ${out}`);

@@ -1,12 +1,13 @@
+# Vercel
 .vercel
 
-# Secrets — real config holds the Resend API key
-includes/config.php
+# Secrets — real PHP config holds the Resend API key
+platform/php/config.php
 
 # Cloudflare local dev secrets (wrangler pages dev)
 .dev.vars
 .dev.vars.*
-!.dev.vars.example
+!platform/cloudflare/.dev.vars.example
 
 # Vercel local env
 .env
@@ -15,14 +16,12 @@ includes/config.php
 
 # Build output
 dist/
-public/
 node_modules/
-.vercel
 
 # Cloudflare wrangler local cache/state
 .wrangler/
 
-# Internal / private docs — not for the repo
-Information Required from Tegrach.docx
+# Design source + internal reference material (kept locally, not in the repo)
+design/
 *.docx
 *.doc

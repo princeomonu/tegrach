@@ -1,7 +1,0 @@
-# Copy to .dev.vars for `npx wrangler pages dev dist` (gitignored).
-# These feed the Pages Function at runtime — they do NOT affect the static build.
-RESEND_API_KEY=re_your_key_here
-CONTACT_TO=developer@tegrach-nigeria.com
-CONTACT_FROM=Tegrach Nigeria <website@tegrach-nigeria.com>
-# Turnstile secret. Cloudflare's always-pass TEST secret shown below.
-TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
