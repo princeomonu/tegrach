@@ -52,6 +52,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 
 $h = fn($s) => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 
+// Cloudflare Turnstile site key (public). Set TURNSTILE_SITE_KEY in the build
+// environment to enable the widget; leave unset to disable it.
+$turnstile_site_key = getenv('TURNSTILE_SITE_KEY') ?: '';
+
 $page_title = 'Contact Us | Tegrach Nigeria Limited';
 $page_description = 'Get in touch with Tegrach Nigeria Limited — request a quote or discuss your next civil, mechanical, dredging or procurement project in Nigeria.';
 $canonical = '/contact';
@@ -120,11 +124,18 @@ include __DIR__ . '/includes/header.php';
             </select>
           </div>
           <div class="field"><label for="f-msg">Project Details</label><textarea id="f-msg" name="message" placeholder="Tell us about your project, scope and timeline..."><?= $h($old['message']) ?></textarea></div>
+          <?php if ($turnstile_site_key !== ''): ?>
+          <div class="field cf-turnstile" data-sitekey="<?= $h($turnstile_site_key) ?>" data-theme="dark"></div>
+          <?php endif; ?>
           <button class="btn btn-orange" id="submit" type="submit"><span>Send Enquiry</span></button>
         </form>
       </div>
     </div>
   </div>
 </section>
+
+<?php if ($turnstile_site_key !== ''): ?>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<?php endif; ?>
 
 <?php include __DIR__ . "/includes/footer.php"; ?>

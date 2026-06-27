@@ -45,6 +45,6 @@
   </div>
 </footer>
 
-<script src="/app.js?v=12" defer></script>
+<script src="/app.js?v=13" defer></script>
 </body>
 </html>

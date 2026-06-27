@@ -128,6 +128,33 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: false, error: 'Please provide ' + need.join(' and ') + '.' }, 422);
   }
 
+  // Cloudflare Turnstile — verify only when a secret is configured.
+  if (env.TURNSTILE_SECRET_KEY) {
+    const token = (form.get('cf-turnstile-response') || '').toString();
+    if (!token) {
+      return json({ ok: false, error: 'Please complete the verification challenge.' }, 422);
+    }
+    try {
+      const verify = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          secret: env.TURNSTILE_SECRET_KEY,
+          response: token,
+          remoteip: request.headers.get('CF-Connecting-IP') || undefined,
+        }),
+      });
+      const result = await verify.json();
+      if (!result.success) {
+        console.log('Turnstile failed', JSON.stringify(result['error-codes'] || []));
+        return json({ ok: false, error: 'Verification failed. Please try again.' }, 403);
+      }
+    } catch (err) {
+      console.log('Turnstile verify error', err);
+      return json({ ok: false, error: 'Could not verify the challenge. Please try again.' }, 502);
+    }
+  }
+
   const missing = ['RESEND_API_KEY', 'CONTACT_TO', 'CONTACT_FROM'].filter((k) => !env[k]);
   if (missing.length) {
     console.log('Missing env vars:', missing.join(', '));

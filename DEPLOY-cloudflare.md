@@ -31,7 +31,16 @@ that sends mail via Resend. Hosting is free and SSL is automatic.
    | `CONTACT_TO` | `contact@tegrach-nigeria.com` | `developer@tegrach-nigeria.com` |
    | `CONTACT_FROM` | `Tegrach Nigeria <website@tegrach-nigeria.com>` | same |
    | `SITE_URL` (optional) | `https://tegrach-nigeria.com` | (leave unset) |
-   Mark `RESEND_API_KEY` as **encrypted/secret**.
+   | `TURNSTILE_SITE_KEY` (optional) | your widget **site** key | same |
+   | `TURNSTILE_SECRET_KEY` (optional) | your widget **secret** key | same |
+   Mark `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY` as **encrypted/secret**.
+
+   **Turnstile:** create a widget at Cloudflare → **Turnstile → Add widget** (add the
+   hostnames `tegrach-nigeria.com`, `www.tegrach-nigeria.com`, and your `*.pages.dev`).
+   It gives a **site key** (public, build-time) and **secret key** (runtime). The form
+   only shows/enforces the challenge when these are set, so you can deploy without it
+   and add it later. `TURNSTILE_SITE_KEY` is read at **build time**, so re-deploy after
+   changing it.
 5. **Custom domain:** Pages → Custom domains → add `tegrach-nigeria.com` (and `www`).
    Cloudflare issues SSL automatically. If the domain's DNS isn't on Cloudflare yet,
    it will walk you through pointing it. **Keep your existing MX (`oxcs`) and the
