@@ -127,10 +127,13 @@
       var btnHTML = btn ? btn.innerHTML : '';
       if (btn) { btn.disabled = true; btn.innerHTML = '<span>Sending…</span>'; }
 
-      fetch(contactForm.getAttribute('action') || '/contact', {
+      var payload = {};
+      new FormData(contactForm).forEach(function (val, key) { payload[key] = val; });
+
+      fetch(contactForm.getAttribute('action') || '/api/contact', {
         method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: new FormData(contactForm)
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       })
         .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
         .then(function (data) {
