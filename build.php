@@ -42,6 +42,10 @@ function rcopy(string $src, string $dst): void {
     }
 }
 
+// Diagnostic: show whether build-time env vars reached this build (names only).
+$tsKey = getenv('TURNSTILE_SITE_KEY') ?: '';
+echo 'TURNSTILE_SITE_KEY at build: ' . ($tsKey !== '' ? 'SET (' . strlen($tsKey) . " chars)\n" : "MISSING\n");
+
 // Fresh output dir.
 rrmdir($dist);
 mkdir($dist, 0755, true);
