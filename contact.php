@@ -52,9 +52,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 
 $h = fn($s) => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 
-// Cloudflare Turnstile site key (public). Set TURNSTILE_SITE_KEY in the build
-// environment to enable the widget; leave unset to disable it.
-$turnstile_site_key = getenv('TURNSTILE_SITE_KEY') ?: '';
+// Cloudflare Turnstile site key (public — safe to commit; it lives in client HTML
+// by design). Env var overrides the default if you ever rotate the widget.
+$turnstile_site_key = getenv('TURNSTILE_SITE_KEY') ?: '0x4AAAAAADrp2mMW2neVCsDi';
 
 $page_title = 'Contact Us | Tegrach Nigeria Limited';
 $page_description = 'Get in touch with Tegrach Nigeria Limited — request a quote or discuss your next civil, mechanical, dredging or procurement project in Nigeria.';
