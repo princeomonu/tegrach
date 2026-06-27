@@ -121,8 +121,13 @@ export async function onRequestPost({ request, env }) {
     return json({ ok: false, error: 'Please provide ' + need.join(' and ') + '.' }, 422);
   }
 
-  if (!env.RESEND_API_KEY || !env.CONTACT_TO || !env.CONTACT_FROM) {
-    return json({ ok: false, error: 'Email service is not configured.' }, 500);
+  const missing = ['RESEND_API_KEY', 'CONTACT_TO', 'CONTACT_FROM'].filter((k) => !env[k]);
+  if (missing.length) {
+    console.log('Missing env vars:', missing.join(', '));
+    return json(
+      { ok: false, error: 'Email service is not configured. Missing: ' + missing.join(', ') },
+      500
+    );
   }
 
   const siteUrl = env.SITE_URL || 'https://tegrach-nigeria.com';
