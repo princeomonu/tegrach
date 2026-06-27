@@ -26,11 +26,18 @@ const esc = (s) =>
 
 const nl2br = (s) => esc(s).replace(/\r?\n/g, '<br>');
 
-function buildEmailHtml(d, siteUrl) {
+function bufToBase64(buf) {
+  const bytes = new Uint8Array(buf);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+
+function buildEmailHtml(d, siteUrl, logo) {
   const orange = '#FD6600';
   const ink = '#161616';
   const font = "'Segoe UI',Tahoma,Geneva,Verdana,Arial,sans-serif";
-  const logo = `${siteUrl}/assets/tegrach/favicon-64.png`;
+  logo = logo || `${siteUrl}/assets/tegrach/favicon-64.png`;
 
   const row = (label, value, accent = false) => {
     if (!value || !String(value).trim()) return '';
@@ -144,14 +151,37 @@ export async function onRequestPost({ request, env }) {
     (d.service ? `Service: ${d.service}\n` : '') +
     `\nMessage:\n${d.message}\n`;
 
+  // Embed the logo inline (CID) by fetching it from this same deployment, so it
+  // renders regardless of which domain the site is served on. Falls back to the
+  // absolute URL if the asset can't be fetched.
+  let logoSrc = `${siteUrl}/assets/tegrach/favicon-64.png`;
+  let attachments;
+  try {
+    const assetRes = await fetch(new URL('/assets/tegrach/favicon-64.png', request.url));
+    if (assetRes.ok) {
+      attachments = [
+        {
+          filename: 'favicon-64.png',
+          content: bufToBase64(await assetRes.arrayBuffer()),
+          content_id: 'tegrachlogo',
+          content_type: 'image/png',
+        },
+      ];
+      logoSrc = 'cid:tegrachlogo';
+    }
+  } catch (err) {
+    console.log('Logo embed failed, using URL', err);
+  }
+
   const payload = {
     from: env.CONTACT_FROM,
     to: [env.CONTACT_TO],
     reply_to: d.email,
     subject,
     text,
-    html: buildEmailHtml(d, siteUrl),
+    html: buildEmailHtml(d, siteUrl, logoSrc),
   };
+  if (attachments) payload.attachments = attachments;
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
